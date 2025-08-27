@@ -1,0 +1,398 @@
+```html
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>刘伟销售业绩分析报告</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Microsoft+YaHei&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Microsoft YaHei', sans-serif;
+      background-color: #f0f2f5;
+      overflow: hidden;
+    }
+
+    .presentation {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-title {
+      font-size: 36px;
+      color: #1a3c6e;
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: bold;
+      width: 90%;
+    }
+
+    .chart-container {
+      width: 80%;
+      height: 60%;
+      position: relative;
+    }
+
+    .table-container {
+      width: 85%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      font-size: 18px;
+    }
+
+    .table-container th, .table-container td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .table-container th {
+      background-color: #1a3c6e;
+      color: white;
+    }
+
+    .table-container tr:nth-child(even) {
+      background-color: #f8f9fc;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .highlight {
+      color: #e67e22;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="presentation">
+
+  <!-- Slide 1: 整体销售业绩概览 -->
+  <div class="slide">
+    <h1 class="slide-title">刘伟2024年1月销售业绩总览</h1>
+    <table class="table-container">
+      <tr><th>指标类型</th><th>数值</th></tr>
+      <tr><td>总销售额</td><td>8,419.56万元</td></tr>
+      <tr><td>总销售数量</td><td>257,547单位</td></tr>
+      <tr><td>平均销售额完成率</td><td>297.8%</td></tr>
+      <tr><td>平均销售数量完成率</td><td>124.1%</td></tr>
+      <tr><td>平均同比增长率</td><td>270.5%</td></tr>
+    </table>
+    <div class="footer">© 2024 销售分析团队 | 蓝色主题 · 专业风格</div>
+  </div>
+
+  <!-- Slide 2: 各医院销售额对比分析 -->
+  <div class="slide">
+    <h1 class="slide-title">各医院销售额分布</h1>
+    <div class="chart-container">
+      <canvas id="hospitalSalesBarChart"></canvas>
+    </div>
+    <div class="footer">© 2024 销售分析团队 | 蓝色主题 · 专业风格</div>
+  </div>
+
+  <!-- Slide 3: 产品销售额占比分析 -->
+  <div class="slide">
+    <h1 class="slide-title">产品1001 vs 1002销售额占比</h1>
+    <div class="chart-container">
+      <canvas id="productPieChart"></canvas>
+    </div>
+    <div class="footer">© 2024 销售分析团队 | 蓝色主题 · 专业风格</div>
+  </div>
+
+  <!-- Slide 4: 各医院目标完成率对比 -->
+  <div class="slide">
+    <h1 class="slide-title">销售额完成率对比</h1>
+    <div class="chart-container">
+      <canvas id="completionRateBarChart"></canvas>
+    </div>
+    <div class="footer">© 2024 销售分析团队 | 蓝色主题 · 专业风格</div>
+  </div>
+
+  <!-- Slide 5: 同比增长率分析 -->
+  <div class="slide">
+    <h1 class="slide-title">销售额同比增长率对比</h1>
+    <div class="chart-container">
+      <canvas id="growthRateBarChart"></canvas>
+    </div>
+    <div class="footer">© 2024 销售分析团队 | 蓝色主题 · 专业风格</div>
+  </div>
+
+  <!-- Slide 6: 详细销售数据表格 -->
+  <div class="slide">
+    <h1 class="slide-title">各医院详细销售数据汇总</h1>
+    <table class="table-container">
+      <tr>
+        <th>医院名称</th>
+        <th>产品</th>
+        <th>销售额(万元)</th>
+        <th>销售数量</th>
+        <th>目标完成率</th>
+        <th>同比增长率</th>
+      </tr>
+      <tr><td>湖北省人民医院</td><td>1002</td><td>1,120</td><td>34,247</td><td>522.8%</td><td>483.3%</td></tr>
+      <tr><td>北京天坛医院</td><td>1002</td><td>1,065</td><td>31,440</td><td>840.6%</td><td>877.1%</td></tr>
+      <tr><td>湖北省人民医院</td><td>1001</td><td>770</td><td>18,703</td><td>118.6%</td><td>46.1%</td></tr>
+      <tr><td>北京天坛医院</td><td>1001</td><td>675</td><td>20,732</td><td>170.5%</td><td>94.5%</td></tr>
+      <tr><td>唐山市人民医院</td><td>1001</td><td>833</td><td>17,899</td><td>135.4%</td><td>64.0%</td></tr>
+      <tr><td>重庆医科大学附属第二医院</td><td>1002</td><td>715</td><td>32,316</td><td>334.9%</td><td>308.6%</td></tr>
+      <tr><td>唐山市人民医院</td><td>1002</td><td>708</td><td>32,716</td><td>476.7%</td><td>480.3%</td></tr>
+      <tr><td>重庆医科大学附属第二医院</td><td>1001</td><td>733</td><td>16,148</td><td>182.2%</td><td>110.6%</td></tr>
+      <tr><td>河南科技大学第一附属医院</td><td>1002</td><td>605</td><td>34,854</td><td>198.1%</td><td>149.0%</td></tr>
+      <tr><td>河南科技大学第一附属医院</td><td>1001</td><td>408</td><td>18,093</td><td>98.0%</td><td>10.3%</td></tr>
+    </table>
+    <div class="footer">© 2024 销售分析团队 | 蓝色主题 · 专业风格</div>
+  </div>
+
+</div>
+
+<script>
+  // Slide 2: 各医院销售额柱状图
+  const hospitalNames = [
+    '湖北省人民医院',
+    '北京天坛医院',
+    '重庆医科大学附属第二医院',
+    '唐山市人民医院',
+    '河南科技大学第一附属医院'
+  ];
+  const salesData = [1890, 1740, 1033, 1037, 899];
+
+  new Chart(document.getElementById('hospitalSalesBarChart'), {
+    type: 'bar',
+    data: {
+      labels: hospitalNames,
+      datasets: [{
+        label: '销售额（万元）',
+        data: salesData,
+        backgroundColor: '#1a3c6e',
+        borderColor: '#1a3c6e',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '销售额（万元）'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: '医院名称'
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `销售额: ${context.raw}万元`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Slide 3: 产品销售额占比饼图
+  const productPieChart = new Chart(document.getElementById('productPieChart'), {
+    type: 'pie',
+    data: {
+      labels: ['产品1002', '产品1001'],
+      datasets: [{
+        data: [55.2, 44.8],
+        backgroundColor: ['#1a3c6e', '#4a90e2'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            font: {
+              size: 18
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.label}: ${context.parsed}%`;
+            }
+          }
+        },
+        datalabels: {
+          display: true,
+          color: '#fff',
+          font: {
+            weight: 'bold',
+            size: 16
+          },
+          formatter: (value) => `${value.toFixed(1)}%`
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+
+  // 引入 DataLabels 插件（需额外引入）
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0';
+  script.onload = () => {
+    Chart.register(ChartDataLabels);
+  };
+  document.head.appendChild(script);
+
+  // Slide 4: 目标完成率柱状图
+  const completionLabels = [
+    '北京天坛医院(1002)',
+    '湖北省人民医院(1002)',
+    '唐山市人民医院(1002)',
+    '重庆医科大学附属第二医院(1002)',
+    '河南科技大学第一附属医院(1002)',
+    '北京天坛医院(1001)',
+    '重庆医科大学附属第二医院(1001)',
+    '唐山市人民医院(1001)',
+    '湖北省人民医院(1001)',
+    '河南科技大学第一附属医院(1001)'
+  ];
+  const completionRates = [840.6, 522.8, 476.7, 334.9, 198.1, 170.5, 182.2, 135.4, 118.6, 98.0];
+
+  new Chart(document.getElementById('completionRateBarChart'), {
+    type: 'bar',
+    data: {
+      labels: completionLabels,
+      datasets: [{
+        label: '目标完成率 (%)',
+        data: completionRates,
+        backgroundColor: '#1a3c6e',
+        borderColor: '#1a3c6e',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '完成率 (%)'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: '医院与产品'
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `完成率: ${context.raw}%`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Slide 5: 同比增长率柱状图
+  const growthLabels = [
+    '北京天坛医院(1002)',
+    '湖北省人民医院(1002)',
+    '唐山市人民医院(1002)',
+    '重庆医科大学附属第二医院(1002)',
+    '河南科技大学附属第一医院(1002)',
+    '重庆医科大学附属第二医院(1001)',
+    '湖北省人民医院(1001)',
+    '河南科技大学附属第一医院(1001)',
+    '北京天坛医院(1001)',
+    '唐山市人民医院(1001)'
+  ];
+  const growthRates = [877.1, 483.3, 480.3, 308.6, 149.0, 110.6, 46.1, 10.3, 94.5, 64.0];
+
+  new Chart(document.getElementById('growthRateBarChart'), {
+    type: 'bar',
+    data: {
+      labels: growthLabels,
+      datasets: [{
+        label: '同比增长率 (%)',
+        data: growthRates,
+        backgroundColor: '#1a3c6e',
+        borderColor: '#1a3c6e',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '同比增长率 (%)'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: '医院与产品'
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `同比增长率: ${context.raw}%`;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
+```
