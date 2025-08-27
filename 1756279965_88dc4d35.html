@@ -1,0 +1,527 @@
+# 刘伟销售业绩分析报告 - PPT风格HTML
+
+下面是一个完整的PPT风格的HTML页面，使用图表展示销售数据，每张幻灯片占满整个屏幕：
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘伟销售业绩分析报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            overflow: hidden;
+            background-color: #f0f4f8;
+        }
+        
+        .ppt-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+        
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #1a3a8f 0%, #2c5cc5 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill-opacity="0.03" fill="white" width="50" height="50" /><rect fill-opacity="0.03" fill="white" x="50" y="50" width="50" height="50" /></svg>');
+            z-index: 0;
+        }
+        
+        .slide-content {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .chart-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .chart-wrapper {
+            width: 80%;
+            height: 70%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: center;
+            color: #333;
+        }
+        
+        .data-table th {
+            background-color: #2c5cc5;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f2f6fc;
+        }
+        
+        .data-table tr:hover {
+            background-color: #e6effd;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 16px;
+            opacity: 0.7;
+        }
+        
+        .comparison-cards {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-card h3 {
+            color: #2c5cc5;
+            margin-bottom: 15px;
+        }
+        
+        .comparison-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a3a8f;
+        }
+        
+        .footer-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="ppt-container">
+        <!-- Slide 1: 销售业绩概览 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">刘伟整体销售表现</h1>
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="overviewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">1 / 6</div>
+        </div>
+        
+        <!-- Slide 2: 产品销售额分布 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">产品1001 vs 1002销售额对比</h1>
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="productSalesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">2 / 6</div>
+        </div>
+        
+        <!-- Slide 3: 目标达成率分析 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">各产品目标金额达成率</h1>
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="achievementChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">3 / 6</div>
+        </div>
+        
+        <!-- Slide 4: 退货率分析 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">各产品退货率对比</h1>
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="returnRateChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">4 / 6</div>
+        </div>
+        
+        <!-- Slide 5: 销售数据明细表 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">详细销售数据汇总表</h1>
+                <div class="chart-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>医院名称</th>
+                                <th>产品代码</th>
+                                <th>销售金额(万)</th>
+                                <th>目标金额(万)</th>
+                                <th>达成率</th>
+                                <th>退货金额(万)</th>
+                                <th>退货率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>北京天坛医院</td>
+                                <td>1002</td>
+                                <td>1065</td>
+                                <td>126.68</td>
+                                <td>840%</td>
+                                <td>247</td>
+                                <td>23.2%</td>
+                            </tr>
+                            <tr>
+                                <td>北京天坛医院</td>
+                                <td>1001</td>
+                                <td>675</td>
+                                <td>395.85</td>
+                                <td>170%</td>
+                                <td>22</td>
+                                <td>3.3%</td>
+                            </tr>
+                            <tr>
+                                <td>湖北省人民医院</td>
+                                <td>1002</td>
+                                <td>1120</td>
+                                <td>214.25</td>
+                                <td>523%</td>
+                                <td>80</td>
+                                <td>7.1%</td>
+                            </tr>
+                            <tr>
+                                <td>湖北省人民医院</td>
+                                <td>1001</td>
+                                <td>770</td>
+                                <td>648.96</td>
+                                <td>119%</td>
+                                <td>240</td>
+                                <td>31.2%</td>
+                            </tr>
+                            <tr>
+                                <td>唐山市人民医院</td>
+                                <td>1001</td>
+                                <td>833</td>
+                                <td>615.38</td>
+                                <td>135%</td>
+                                <td>252</td>
+                                <td>30.3%</td>
+                            </tr>
+                            <tr>
+                                <td>唐山市人民医院</td>
+                                <td>1002</td>
+                                <td>708</td>
+                                <td>148.51</td>
+                                <td>477%</td>
+                                <td>327</td>
+                                <td>46.2%</td>
+                            </tr>
+                            <tr>
+                                <td>重庆医科大学附属第二医院</td>
+                                <td>1002</td>
+                                <td>715</td>
+                                <td>213.50</td>
+                                <td>335%</td>
+                                <td>170</td>
+                                <td>23.8%</td>
+                            </tr>
+                            <tr>
+                                <td>重庆医科大学附属第二医院</td>
+                                <td>1001</td>
+                                <td>733</td>
+                                <td>402.28</td>
+                                <td>182%</td>
+                                <td>393</td>
+                                <td>53.6%</td>
+                            </tr>
+                            <tr>
+                                <td>河南科技大学第一附属医院</td>
+                                <td>1002</td>
+                                <td>605</td>
+                                <td>305.39</td>
+                                <td>198%</td>
+                                <td>136</td>
+                                <td>22.5%</td>
+                            </tr>
+                            <tr>
+                                <td>河南科技大学第一附属医院</td>
+                                <td>1001</td>
+                                <td>408</td>
+                                <td>416.41</td>
+                                <td>98%</td>
+                                <td>111</td>
+                                <td>27.2%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="slide-number">5 / 6</div>
+        </div>
+        
+        <!-- Slide 6: 产品表现对比 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">产品1001与1002平均表现对比</h1>
+                <div class="comparison-cards">
+                    <div class="comparison-card">
+                        <h3>平均销售额</h3>
+                        <div class="comparison-value">1001: 683.8万</div>
+                        <div class="comparison-value">1002: 842.6万</div>
+                    </div>
+                    <div class="comparison-card">
+                        <h3>平均达成率</h3>
+                        <div class="comparison-value">1001: 141%</div>
+                        <div class="comparison-value">1002: 474%</div>
+                    </div>
+                    <div class="comparison-card">
+                        <h3>平均退货率</h3>
+                        <div class="comparison-value">1001: 29.1%</div>
+                        <div class="comparison-value">1002: 24.6%</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+                <div class="footer-note">产品1002在达成率方面表现显著优于产品1001</div>
+            </div>
+            <div class="slide-number">6 / 6</div>
+        </div>
+    </div>
+    
+    <div class="navigation">
+        <button class="nav-btn" onclick="prevSlide()">←</button>
+        <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+
+    <script>
+        // 数据
+        const hospitals = ['北京天坛医院', '湖北省人民医院', '唐山市人民医院', '重庆医科大学附属第二医院', '河南科技大学第一附属医院'];
+        const salesData = [1740, 1890, 1541, 1448, 1013];
+        
+        const productSales = {
+            '1001': [675, 770, 833, 733, 408],
+            '1002': [1065, 1120, 708, 715, 605]
+        };
+        
+        const achievementRate = {
+            '1001': [170, 119, 135, 182, 98],
+            '1002': [840, 523, 477, 335, 198]
+        };
+        
+        const returnRate = {
+            '1001': [3.3, 31.2, 30.3, 53.6, 27.2],
+            '1002': [23.2, 7.1, 46.2, 23.8, 22.5]
+        };
+        
+        const averageData = {
+            '1001': { sales: 683.8, achievement: 141, returnRate: 29.1 },
+            '1002': { sales: 842.6, achievement: 474, returnRate: 24.6 }
+        };
+        
+        // 初始化图表
+        window.onload = function() {
+            // 销售业绩概览图表
+            new Chart(document.getElementById('overviewChart'), {
+                type: 'bar',
+                data: {
+                    labels: hospitals,
+                    datasets: [{
+                        label: '销售金额（万）',
+                        data: salesData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '各医院销售金额对比',
+                            font: { size: 18 }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '销售金额（万元）'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 产品销售额对比图表
+            new Chart(document.getElementById('productSalesChart'), {
+                type: 'bar',
+                data: {
+                    labels: hospitals,
+                    datasets: [
+                        {
+                            label: '产品1001',
+                            data: productSales['1001'],
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '产品1002',
+                            data: productSales['1002'],
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '各产品在各医院的销售金额',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '销售金额（万元）'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 目标达成率图表
+            new Chart(document.getElementById('achievementChart'), {
+                type: 'bar',
+                data: {
+                    labels: hospitals,
+                    datasets: [
+                        {
+                            label: '产品1001',
+                            data: achievementRate['1001'],
+                            backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '产品1002',
+                            data: achievementRate['1002'],
+                            backgroundColor: 'rgba(153, 102, 255, 0.7)',
