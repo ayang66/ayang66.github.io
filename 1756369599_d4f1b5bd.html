@@ -1,0 +1,532 @@
+# 刘伟2024年1月销售业绩分析PPT
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘伟2024年1月销售业绩分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            overflow: hidden;
+            background-color: #f0f4f8;
+        }
+        
+        .ppt-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+        
+        .slide {
+            flex: 0 0 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            padding: 40px;
+            background: linear-gradient(135deg, #1a3a8f 0%, #2a56b6 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #4cc9ff, #1e88e5);
+        }
+        
+        .slide-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .chart-container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chart-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #e3f2fd;
+        }
+        
+        .chart-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(30, 136, 229, 0.8);
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #1e88e5;
+            transform: translateY(-3px);
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            font-size: 16px;
+            opacity: 0.7;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(30, 136, 229, 0.5);
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .data-highlight {
+            color: #4fc3f7;
+            font-weight: bold;
+        }
+        
+        .positive {
+            color: #4caf50;
+        }
+        
+        .negative {
+            color: #f44336;
+        }
+        
+        .two-columns {
+            display: flex;
+            gap: 25px;
+            height: 100%;
+        }
+        
+        .two-columns > div {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="ppt-container">
+        <!-- Slide 1: 整体销售表现概览 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">各医院销售金额对比</h1>
+                <div class="chart-container">
+                    <div class="chart-title">2024年1月各医院销售金额分布（单位：万元）</div>
+                    <div class="chart-wrapper">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">Slide 1/7</div>
+        </div>
+
+        <!-- Slide 2: 产品线销售对比 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">产品1001 vs 1002销售对比</h1>
+                <div class="chart-container">
+                    <div class="chart-title">各医院产品线销售金额分布（单位：万元）</div>
+                    <div class="chart-wrapper">
+                        <canvas id="productChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">Slide 2/7</div>
+        </div>
+
+        <!-- Slide 3: 目标完成率分析 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">各医院目标完成率对比</h1>
+                <div class="chart-container">
+                    <div class="chart-title">2024年1月各医院销售目标完成率</div>
+                    <div class="chart-wrapper">
+                        <canvas id="targetChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">Slide 3/7</div>
+        </div>
+
+        <!-- Slide 4: 同比增长表现 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">同比增长率对比</h1>
+                <div class="chart-container">
+                    <div class="chart-title">各医院同比增长率</div>
+                    <div class="chart-wrapper">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">Slide 4/7</div>
+        </div>
+
+        <!-- Slide 5: 退货情况分析 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">各医院退货金额对比</h1>
+                <div class="chart-container">
+                    <div class="chart-title">2024年1月各医院退货金额（单位：万元）</div>
+                    <div class="chart-wrapper">
+                        <canvas id="returnChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">Slide 5/7</div>
+        </div>
+
+        <!-- Slide 6: 详细销售数据表格 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">2024年1月销售详细数据表</h1>
+                <div class="chart-container">
+                    <div class="chart-title">销售数据明细（单位：万元）</div>
+                    <div style="overflow-y: auto; height: 100%;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>医院名称</th>
+                                    <th>产品代码</th>
+                                    <th>销售金额</th>
+                                    <th>目标金额</th>
+                                    <th>目标完成率</th>
+                                    <th>同比增长率</th>
+                                    <th>退货金额</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>北京天坛医院</td>
+                                    <td>1002</td>
+                                    <td class="data-highlight">1065</td>
+                                    <td>126.68</td>
+                                    <td class="positive">840.7%</td>
+                                    <td class="positive">+877.1%</td>
+                                    <td>247</td>
+                                </tr>
+                                <tr>
+                                    <td>北京天坛医院</td>
+                                    <td>1001</td>
+                                    <td>675</td>
+                                    <td>395.85</td>
+                                    <td class="positive">170.5%</td>
+                                    <td class="positive">+94.5%</td>
+                                    <td>22</td>
+                                </tr>
+                                <tr>
+                                    <td>唐山市人民医院</td>
+                                    <td>1002</td>
+                                    <td class="data-highlight">708</td>
+                                    <td>148.51</td>
+                                    <td class="positive">476.7%</td>
+                                    <td class="positive">+480.3%</td>
+                                    <td>327</td>
+                                </tr>
+                                <tr>
+                                    <td>唐山市人民医院</td>
+                                    <td>1001</td>
+                                    <td>833</td>
+                                    <td>615.38</td>
+                                    <td class="positive">135.4%</td>
+                                    <td class="positive">+63.9%</td>
+                                    <td>252</td>
+                                </tr>
+                                <tr>
+                                    <td>河南科技大学第一附属医院</td>
+                                    <td>1002</td>
+                                    <td class="data-highlight">605</td>
+                                    <td>305.39</td>
+                                    <td class="positive">198.1%</td>
+                                    <td class="positive">+149.0%</td>
+                                    <td>136</td>
+                                </tr>
+                                <tr>
+                                    <td>河南科技大学第一附属医院</td>
+                                    <td>1001</td>
+                                    <td>408</td>
+                                    <td>416.41</td>
+                                    <td class="negative">98.0%</td>
+                                    <td class="positive">+10.3%</td>
+                                    <td>111</td>
+                                </tr>
+                                <tr>
+                                    <td>湖北省人民医院</td>
+                                    <td>1002</td>
+                                    <td class="data-highlight">1120</td>
+                                    <td>214.25</td>
+                                    <td class="positive">522.8%</td>
+                                    <td class="positive">+483.3%</td>
+                                    <td>80</td>
+                                </tr>
+                                <tr>
+                                    <td>湖北省人民医院</td>
+                                    <td>1001</td>
+                                    <td>770</td>
+                                    <td>648.96</td>
+                                    <td class="positive">118.6%</td>
+                                    <td class="positive">+46.1%</td>
+                                    <td>240</td>
+                                </tr>
+                                <tr>
+                                    <td>重庆医科大学附属第二医院</td>
+                                    <td>1002</td>
+                                    <td class="data-highlight">715</td>
+                                    <td>213.50</td>
+                                    <td class="positive">334.9%</td>
+                                    <td class="positive">+308.6%</td>
+                                    <td>170</td>
+                                </tr>
+                                <tr>
+                                    <td>重庆医科大学附属第二医院</td>
+                                    <td>1001</td>
+                                    <td>733</td>
+                                    <td>402.28</td>
+                                    <td class="positive">182.2%</td>
+                                    <td class="positive">+110.6%</td>
+                                    <td>393</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">Slide 6/7</div>
+        </div>
+
+        <!-- Slide 7: 退货率分析 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1 class="slide-title">各医院退货率对比</h1>
+                <div class="chart-container">
+                    <div class="chart-title">2024年1月各医院退货率统计</div>
+                    <div class="chart-wrapper">
+                        <canvas id="returnRateChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">Slide 7/7</div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="prevSlide()">←</button>
+        <button class="nav-btn" onclick="nextSlide()">→</button>
+    </div>
+
+    <script>
+        // 数据
+        const hospitals = ['湖北省人民医院', '北京天坛医院', '重庆医科大学附属第二医院', '唐山市人民医院', '河南科技大学第一附属医院'];
+        const salesData = [1890, 1740, 1448, 1541, 1013];
+        const targetRate = [320.7, 505.6, 258.6, 306.1, 148.1];
+        const growthRate = [264.7, 485.8, 209.6, 272.1, 79.7];
+        const returnAmount = [320, 269, 563, 579, 247];
+        const returnRate = [16.9, 15.5, 38.9, 37.6, 24.4];
+        
+        // 产品数据
+        const productData = {
+            '湖北省人民医院': { '1001': 770, '1002': 1120 },
+            '北京天坛医院': { '1001': 675, '1002': 1065 },
+            '重庆医科大学附属第二医院': { '1001': 733, '1002': 715 },
+            '唐山市人民医院': { '1001': 833, '1002': 708 },
+            '河南科技大学第一附属医院': { '1001': 408, '1002': 605 }
+        };
+
+        // 初始化图表
+        function initCharts() {
+            // 销售金额柱状图
+            new Chart(document.getElementById('salesChart'), {
+                type: 'bar',
+                data: {
+                    labels: hospitals,
+                    datasets: [{
+                        label: '销售金额（万元）',
+                        data: salesData,
+                        backgroundColor: 'rgba(76, 175, 247, 0.7)',
+                        borderColor: 'rgba(76, 175, 247, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `销售金额: ${context.raw} 万元`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'white',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 产品对比柱状图
+            new Chart(document.getElementById('productChart'), {
+                type: 'bar',
+                data: {
+                    labels: hospitals,
+                    datasets: [
+                        {
+                            label: '产品1001',
+                            data: hospitals.map(h => productData[h]['1001']),
+                            backgroundColor: 'rgba(41, 182, 246, 0.7)',
+                            borderColor: 'rgba(41, 182, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '产品1002',
+                            data: hospitals.map(h => productData[h]['1002']),
+                            backgroundColor: 'rgba(129, 212, 250, 0.7)',
+                            borderColor: 'rgba(129, 212, 250, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'white',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
