@@ -1,0 +1,553 @@
+# 刘伟2024年1月销售业绩分析PPT
+
+以下是基于您提供的数据生成的PPT风格HTML页面，包含多种图表展示销售业绩数据：
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘伟2024年1月销售业绩分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ppt-container {
+            width: 1024px;
+            height: 768px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(to bottom, #f9f9f9, #fff);
+        }
+        
+        .slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #1e88e5;
+        }
+        
+        .title {
+            font-size: 32px;
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            color: #5d99c6;
+        }
+        
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #1e88e5;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .navigation {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background-color: #1565c0;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #777;
+            font-size: 16px;
+        }
+        
+        .highlight {
+            color: #1e88e5;
+            font-weight: bold;
+        }
+        
+        .data-card {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 180px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0d47a1;
+        }
+        
+        .completion-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 12px;
+            background-color: #4caf50;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .not-completed {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="ppt-container">
+        <!-- 幻灯片1：总体销售业绩概览 -->
+        <div class="slide active">
+            <div class="header">
+                <h1 class="title">刘伟2024年1月销售业绩分析</h1>
+                <p class="subtitle">总体销售业绩概览</p>
+            </div>
+            <div class="content">
+                <div class="data-card">
+                    <div class="card">
+                        <h3>总销售额</h3>
+                        <p>763.2万元</p>
+                    </div>
+                    <div class="card">
+                        <h3>总销售数量</h3>
+                        <p>244,746支/盒</p>
+                    </div>
+                    <div class="card">
+                        <h3>覆盖医院</h3>
+                        <p>5家</p>
+                    </div>
+                </div>
+                <div class="data-card">
+                    <div class="card">
+                        <h3>达标率</h3>
+                        <p>90%</p>
+                    </div>
+                    <div class="card">
+                        <h3>覆盖城市</h3>
+                        <p>5个</p>
+                    </div>
+                </div>
+                <table>
+                    <tr>
+                        <th>指标</th>
+                        <th>数值</th>
+                    </tr>
+                    <tr>
+                        <td>总销售额</td>
+                        <td>763.2万元</td>
+                    </tr>
+                    <tr>
+                        <td>总销售数量</td>
+                        <td>244,746支/盒</td>
+                    </tr>
+                    <tr>
+                        <td>覆盖医院数量</td>
+                        <td>5家</td>
+                    </tr>
+                    <tr>
+                        <td>达标率</td>
+                        <td>90%</td>
+                    </tr>
+                    <tr>
+                        <td>覆盖城市</td>
+                        <td>5个</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">幻灯片 1/6</div>
+        </div>
+
+        <!-- 幻灯片2：各医院销售额对比 -->
+        <div class="slide">
+            <div class="header">
+                <h1 class="title">各医院销售额对比</h1>
+                <p class="subtitle">医院销售额柱状图</p>
+            </div>
+            <div class="content">
+                <div class="chart-container">
+                    <canvas id="hospitalSalesChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">幻灯片 2/6</div>
+        </div>
+
+        <!-- 幻灯片3：产品销售额分布 -->
+        <div class="slide">
+            <div class="header">
+                <h1 class="title">产品销售额分布</h1>
+                <p class="subtitle">产品销售额占比饼图</p>
+            </div>
+            <div class="content">
+                <div class="chart-container">
+                    <canvas id="productSalesChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">幻灯片 3/6</div>
+        </div>
+
+        <!-- 幻灯片4：各医院产品销售额明细 -->
+        <div class="slide">
+            <div class="header">
+                <h1 class="title">各医院产品销售额明细</h1>
+                <p class="subtitle">医院-产品销售额明细表</p>
+            </div>
+            <div class="content">
+                <table>
+                    <tr>
+                        <th>医院名称</th>
+                        <th>产品1002销售额(万元)</th>
+                        <th>产品1001销售额(万元)</th>
+                        <th>合计(万元)</th>
+                    </tr>
+                    <tr>
+                        <td>北京天坛医院</td>
+                        <td>106.5</td>
+                        <td>67.5</td>
+                        <td>174.0</td>
+                    </tr>
+                    <tr>
+                        <td>唐山市人民医院</td>
+                        <td>70.8</td>
+                        <td>83.3</td>
+                        <td>154.1</td>
+                    </tr>
+                    <tr>
+                        <td>河南科技大学第一附属医院</td>
+                        <td>60.5</td>
+                        <td>40.8</td>
+                        <td>101.3</td>
+                    </tr>
+                    <tr>
+                        <td>湖北省人民医院</td>
+                        <td>112.0</td>
+                        <td>77.0</td>
+                        <td>189.0</td>
+                    </tr>
+                    <tr>
+                        <td>重庆医科大学附属第二医院</td>
+                        <td>71.5</td>
+                        <td>73.3</td>
+                        <td>144.8</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">幻灯片 4/6</div>
+        </div>
+
+        <!-- 幻灯片5：目标完成情况分析 -->
+        <div class="slide">
+            <div class="header">
+                <h1 class="title">目标完成情况分析</h1>
+                <p class="subtitle">目标完成率对比表</p>
+            </div>
+            <div class="content">
+                <div style="overflow-y: auto; max-height: 450px;">
+                    <table>
+                        <tr>
+                            <th>医院名称</th>
+                            <th>产品</th>
+                            <th>目标金额(万元)</th>
+                            <th>实际金额(万元)</th>
+                            <th>完成率</th>
+                            <th>是否达标</th>
+                        </tr>
+                        <tr>
+                            <td>北京天坛医院</td>
+                            <td>1002</td>
+                            <td>12.67</td>
+                            <td>106.5</td>
+                            <td>840%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>北京天坛医院</td>
+                            <td>1001</td>
+                            <td>39.59</td>
+                            <td>67.5</td>
+                            <td>171%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>唐山市人民医院</td>
+                            <td>1002</td>
+                            <td>14.85</td>
+                            <td>70.8</td>
+                            <td>477%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>唐山市人民医院</td>
+                            <td>1001</td>
+                            <td>61.54</td>
+                            <td>83.3</td>
+                            <td>135%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>河南科技大学第一附属医院</td>
+                            <td>1002</td>
+                            <td>30.54</td>
+                            <td>60.5</td>
+                            <td>198%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>河南科技大学第一附属医院</td>
+                            <td>1001</td>
+                            <td>41.64</td>
+                            <td>40.8</td>
+                            <td>98%</td>
+                            <td><span class="completion-badge not-completed">否</span></td>
+                        </tr>
+                        <tr>
+                            <td>湖北省人民医院</td>
+                            <td>1002</td>
+                            <td>21.43</td>
+                            <td>112.0</td>
+                            <td>523%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>湖北省人民医院</td>
+                            <td>1001</td>
+                            <td>64.90</td>
+                            <td>77.0</td>
+                            <td>119%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>重庆医科大学附属第二医院</td>
+                            <td>1002</td>
+                            <td>21.35</td>
+                            <td>71.5</td>
+                            <td>335%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                        <tr>
+                            <td>重庆医科大学附属第二医院</td>
+                            <td>1001</td>
+                            <td>40.23</td>
+                            <td>73.3</td>
+                            <td>182%</td>
+                            <td><span class="completion-badge">是</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="slide-number">幻灯片 5/6</div>
+        </div>
+
+        <!-- 幻灯片6：同比增长情况 -->
+        <div class="slide">
+            <div class="header">
+                <h1 class="title">同比增长情况</h1>
+                <p class="subtitle">同比增长率对比柱状图</p>
+            </div>
+            <div class="content">
+                <div class="chart-container">
+                    <canvas id="growthRateChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">幻灯片 6/6</div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn">上一页</button>
+            <button class="nav-btn" id="next-btn">下一页</button>
+        </div>
+    </div>
+
+    <script>
+        // 幻灯片控制逻辑
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 医院销售额柱状图
+            const hospitalSalesCtx = document.getElementById('hospitalSalesChart').getContext('2d');
+            new Chart(hospitalSalesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['北京天坛医院', '唐山市人民医院', '河南科技大学第一附属医院', '湖北省人民医院', '重庆医科大学附属第二医院'],
+                    datasets: [{
+                        label: '销售额(万元)',
+                        data: [174, 154.1, 101.3, 189, 144.8],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(54, 162, 235, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '各医院销售额对比(万元)',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `销售额: ${context.raw}万元`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '销售额(万元)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 产品销售额饼图
+            const productSalesCtx = document.getElementById('productSalesChart').getContext('2d');
+            new Chart(productSalesCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['产品1002', '产品1001'],
+                    datasets: [{
+                        data: [59.7, 40.3],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(75, 192, 192, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192
