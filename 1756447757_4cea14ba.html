@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘伟2024年1月销售业绩分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            overflow: hidden;
+        }
+        
+        .ppt-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+        }
+        
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            padding: 40px;
+            background: linear-gradient(135deg, #1a3a8f 0%, #2a56b6 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .slide-content {
+            width: 90%;
+            height: 80%;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            color: #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1a3a8f;
+            font-size: 28px;
+            font-weight: bold;
+            border-bottom: 2px solid #1a3a8f;
+            padding-bottom: 10px;
+        }
+        
+        .chart-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #1a3a8f;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">销售分析报告</div>
+    
+    <div class="ppt-container">
+        <!-- PPT 1：整体业绩概览 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">刘伟1月销售业绩总览</h2>
+                <div class="chart-container">
+                    <canvas id="overviewChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">1 / 6</div>
+        </div>
+        
+        <!-- PPT 2：各医院销售金额对比 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">各医院销售金额分布</h2>
+                <div class="chart-container">
+                    <canvas id="hospitalSalesChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">2 / 6</div>
+        </div>
+        
+        <!-- PPT 3：产品在各医院的目标完成率 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">产品1001 vs 1002目标完成率对比</h2>
+                <div class="chart-container">
+                    <canvas id="completionRateChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">3 / 6</div>
+        </div>
+        
+        <!-- PPT 4：同比增长表现 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">各医院同比增长金额对比</h2>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">4 / 6</div>
+        </div>
+        
+        <!-- PPT 5：产品销售数量详情 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">各产品在各医院的销售数量</h2>
+                <div class="chart-container">
+                    <table>
+                        <tr>
+                            <th>医院名称</th>
+                            <th>产品1001销售数量</th>
+                            <th>产品1002销售数量</th>
+                        </tr>
+                        <tr>
+                            <td>北京天坛医院</td>
+                            <td>20,732.12</td>
+                            <td>31,440.32</td>
+                        </tr>
+                        <tr>
+                            <td>唐山市人民医院</td>
+                            <td>17,899.37</td>
+                            <td>32,715.73</td>
+                        </tr>
+                        <tr>
+                            <td>河南科技大学第一附属医院</td>
+                            <td>18,092.76</td>
+                            <td>34,853.87</td>
+                        </tr>
+                        <tr>
+                            <td>湖北省人民医院</td>
+                            <td>18,702.97</td>
+                            <td>34,246.99</td>
+                        </tr>
+                        <tr>
+                            <td>重庆医科大学附属第二医院</td>
+                            <td>16,148.29</td>
+                            <td>32,315.98</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="slide-number">5 / 6</div>
+        </div>
+        
+        <!-- PPT 6：产品表现总结 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2 class="slide-title">产品1001 vs 1002整体表现对比</h2>
+                <div class="chart-container">
+                    <canvas id="productComparisonChart"></canvas>
+                </div>
+            </div>
+            <div class="slide-number">6 / 6</div>
+        </div>
+    </div>
+    
+    <div class="navigation">
+        <div class="nav-dot active" data-slide="0"></div>
+        <div class="nav-dot" data-slide="1"></div>
+        <div class="nav-dot" data-slide="2"></div>
+        <div class="nav-dot" data-slide="3"></div>
+        <div class="nav-dot" data-slide="4"></div>
+        <div class="nav-dot" data-slide="5"></div>
+    </div>
+
+    <script>
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // PPT 1：整体业绩概览 - 饼图
+            const overviewCtx = document.getElementById('overviewChart').getContext('2d');
+            new Chart(overviewCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['覆盖医院数量', '涉及产品数量', '总销售金额', '平均目标完成率', '同比增长率', '达成目标医院数'],
+                    datasets: [{
+                        data: [5, 2, 7632, 278, 230, 5],
+                        backgroundColor: [
+                            '#1a3a8f', '#2a56b6', '#3b6cd9', '#4d82ff', '#6a9aff', '#8cb2ff'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}${['覆盖医院数量', '涉及产品数量', '达成目标医院数'].includes(context.label) ? '家' : 
+                                           context.label === '总销售金额' ? '元' : '%'}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // PPT 2：各医院销售金额对比 - 柱状图
+            const hospitalSalesCtx = document.getElementById('hospitalSalesChart').getContext('2d');
+            new Chart(hospitalSalesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['湖北省人民医院', '北京天坛医院', '重庆医科大学附属第二医院', '唐山市人民医院', '河南科技大学第一附属医院'],
+                    datasets: [{
+                        label: '销售金额（元）',
+                        data: [1890, 1740, 1448, 1541, 1013],
+                        backgroundColor: '#2a56b6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '销售金额（元）'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // PPT 3：产品在各医院的目标完成率 - 折线图
+            const completionRateCtx = document.getElementById('completionRateChart').getContext('2d');
+            new Chart(completionRateCtx, {
+                type: 'line',
+                data: {
+                    labels: ['北京天坛医院', '唐山市人民医院', '河南科技大学第一附属医院', '湖北省人民医院', '重庆医科大学附属第二医院'],
+                    datasets: [
+                        {
+                            label: '产品1001完成率',
+                            data: [170.5, 135.4, 98.0, 118.6, 182.2],
+                            borderColor: '#1a3a8f',
+                            backgroundColor: 'rgba(26, 58, 143, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: '产品1002完成率',
+                            data: [840.0, 476.7, 198.1, 522.8, 334.9],
+                            borderColor: '#4d82ff',
+                            backgroundColor: 'rgba(77, 130, 255, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '完成率（%）'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // PPT 4：同比增长表现 - 柱状图
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['北京天坛医院', '唐山市人民医院', '河南科技大学第一附属医院', '湖北省人民医院', '重庆医科大学附属第二医院'],
+                    datasets: [{
+                        label: '同比增长率（%）',
+                        data: [875.2, 480.3, 149.0, 483.3, 308.6],
+                        backgroundColor: '#4d82ff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '同比增长率（%）'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // PPT 6：产品表现总结 - 雷达图
+            const productComparisonCtx = document.getElementById('productComparisonChart').getContext('2d');
+            new Chart(productComparisonCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['总销售金额', '平均目标完成率', '平均同比增长率', '销售数量总计'],
+                    datasets: [
+                        {
+                            label: '产品1001',
+                            data: [3419, 141.0, 63.0, 91575.51],
+                            backgroundColor: 'rgba(26, 58, 143, 0.2)',
+                            borderColor: '#1a3a8f',
+                            pointBackgroundColor: '#1a3a8f'
+                        },
+                        {
+                            label: '产品1002',
+                            data: [4213, 474.5, 459.3, 165572.89],
+                            backgroundColor: 'rgba(77, 130, 255, 0.2)',
+                            borderColor: '#4d82ff',
+                            pointBackgroundColor: '#4d82ff'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0
+                        }
+                    }
+                }
+            });
+            
+            // 幻灯片导航
+            const container = document.querySelector('.ppt-container');
+            const dots = document.querySelectorAll('.nav-dot');
+            
+            container.addEventListener('scroll', function() {
+                const slideWidth = window.innerWidth;
+                const currentSlide = Math.round(container.scrollLeft / slideWidth);
+                
+                dots.forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', function() {
+                    container.scrollTo({
+                        left: window.innerWidth * index,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // 添加键盘导航
+            document.addEventListener('keydown', function(e) {
+                const currentSlide = Math.round(container.scrollLeft / window.innerWidth);
+                
+                if (e.key === 'ArrowRight' && currentSlide < dots.length - 1) {
+                    container.scrollTo({
+                        left: window.innerWidth * (currentSlide + 1),
+                        behavior: 'smooth'
+                    });
+                } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                    container.scrollTo({
+                        left: window.innerWidth * (currentSlide - 1),
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
