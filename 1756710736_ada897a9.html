@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刘伟销售业绩分析报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a3a8f 0%, #2a56b6 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .slides-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+        
+        .slide {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 30px;
+            max-width: 1200px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide-title {
+            color: #1a3a8f;
+            font-size: 28px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e6e9ef;
+            text-align: center;
+        }
+        
+        .chart-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #e6e9ef;
+        }
+        
+        th {
+            background-color: #f0f5ff;
+            color: #1a3a8f;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9fafc;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #1a3a8f;
+            color: white;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .nav-btn {
+            background-color: #1a3a8f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background-color: #2a56b6;
+        }
+        
+        .two-columns {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .column {
+            flex: 1;
+        }
+        
+        .highlight {
+            background-color: #fff8e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        
+        .completion-high {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .completion-medium {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .completion-low {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>刘伟销售业绩分析报告</h1>
+        <p>销售数据分析与可视化展示</p>
+    </div>
+    
+    <div class="navigation">
+        <button class="nav-btn" onclick="scrollToSlide(0)">整体概况</button>
+        <button class="nav-btn" onclick="scrollToSlide(1)">医院销售额</button>
+        <button class="nav-btn" onclick="scrollToSlide(2)">产品销售占比</button>
+        <button class="nav-btn" onclick="scrollToSlide(3)">目标完成情况</button>
+        <button class="nav-btn" onclick="scrollToSlide(4)">退货分析</button>
+        <button class="nav-btn" onclick="scrollToSlide(5)">销售数量</button>
+    </div>
+    
+    <div class="slides-container">
+        <!-- PPT 1：整体销售概况 -->
+        <div class="slide">
+            <h2 class="slide-title">整体销售概况</h2>
+            <div class="two-columns">
+                <div class="column">
+                    <table>
+                        <tr>
+                            <th>统计指标</th>
+                            <th>数值</th>
+                        </tr>
+                        <tr>
+                            <td>覆盖医院数量</td>
+                            <td>5家</td>
+                        </tr>
+                        <tr>
+                            <td>涉及产品数量</td>
+                            <td>2种</td>
+                        </tr>
+                        <tr>
+                            <td>总销售金额</td>
+                            <td>7,632</td>
+                        </tr>
+                        <tr>
+                            <td>总销售数量</td>
+                            <td>226,346</td>
+                        </tr>
+                        <tr>
+                            <td>平均单医院销售额</td>
+                            <td>1,526</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="column">
+                    <div class="chart-container">
+                        <canvas id="overviewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight">
+                <p><strong>关键洞察：</strong> 刘伟覆盖了5家医院，销售2种产品，总销售额达到7,632，平均每家医院贡献1,526的销售额。</p>
+            </div>
+        </div>
+        
+        <!-- PPT 2：各医院销售额对比 -->
+        <div class="slide">
+            <h2 class="slide-title">各医院销售金额分布</h2>
+            <div class="chart-container">
+                <canvas id="hospitalSalesChart"></canvas>
+            </div>
+            <div class="highlight">
+                <p><strong>分析：</strong> 湖北省人民医院销售额最高(1,890)，河南科技大学第一附属医院销售额最低(1,013)。最高与最低销售额相差877，表明医院间销售表现存在差异。</p>
+            </div>
+        </div>
+        
+        <!-- PPT 3：产品在各医院销售占比 -->
+        <div class="slide">
+            <h2 class="slide-title">产品1001 vs 1002销售对比</h2>
+            <div class="chart-container">
+                <canvas id="productRatioChart"></canvas>
+            </div>
+            <div class="highlight">
+                <p><strong>分析：</strong> 产品1002在大多数医院中占比较高，但在唐山市人民医院和重庆医科大学附属第二医院，两种产品的销售比例接近平衡。</p>
+            </div>
+        </div>
+        
+        <!-- PPT 4：目标完成情况分析 -->
+        <div class="slide">
+            <h2 class="slide-title">实际销售额 vs 目标金额对比</h2>
+            <div class="chart-container">
+                <canvas id="targetCompletionChart"></canvas>
+            </div>
+            <div class="highlight">
+                <p><strong>分析：</strong> 绝大多数产品的销售目标完成率超过100%，尤其是产品1002在各医院的完成率异常高，最高达到841%。仅河南科技大学第一附属医院的产品1001完成率为98%，略低于目标。</p>
+            </div>
+        </div>
+        
+        <!-- PPT 5：退货情况分析 -->
+        <div class="slide">
+            <h2 class="slide-title">各医院退货金额统计</h2>
+            <div class="chart-container">
+                <canvas id="returnChart"></canvas>
+            </div>
+            <div class="highlight">
+                <p><strong>分析：</strong> 重庆医科大学附属第二医院和唐山市人民医院的退货金额较高，分别达到563和579，需要进一步关注这些医院的退货原因。</p>
+            </div>
+        </div>
+        
+        <!-- PPT 6：产品销售数量对比 -->
+        <div class="slide">
+            <h2 class="slide-title">产品1001 vs 1002销售数量分布</h2>
+            <div class="chart-container">
+                <canvas id="salesQuantityChart"></canvas>
+            </div>
+            <div class="highlight">
+                <p><strong>分析：</strong> 各医院的产品销售数量相对均衡，均在48,000-53,000之间。产品1002的销售数量普遍高于产品1001，与销售额趋势一致。</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 销售业绩分析报告 | 最后更新: 2023年11月1日</p>
+    </div>
+
+    <script>
+        // 平滑滚动到指定幻灯片
+        function scrollToSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            if (index >= 0 && index < slides.length) {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // 在页面加载完成后初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // PPT1: 整体销售概况图表
+            const overviewCtx = document.getElementById('overviewChart').getContext('2d');
+            new Chart(overviewCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['覆盖医院', '产品种类', '总销售金额', '总销售数量'],
+                    datasets: [{
+                        data: [5, 2, 7632, 226346],
+                        backgroundColor: ['#1a3a8f', '#2a56b6', '#3b74e3', '#5c8cec'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '销售关键指标分布'
+                        }
+                    }
+                }
+            });
+            
+            // PPT2: 各医院销售额对比
+            const hospitalSalesCtx = document.getElementById('hospitalSalesChart').getContext('2d');
+            new Chart(hospitalSalesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['湖北省人民医院', '北京天坛医院', '唐山市人民医院', '重庆医科大学附属第二医院', '河南科技大学第一附属医院'],
+                    datasets: [{
+                        label: '销售额',
+                        data: [1890, 1740, 1541, 1448, 1013],
+                        backgroundColor: '#1a3a8f',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '各医院销售额对比'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '销售额'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // PPT3: 产品在各医院销售占比
+            const productRatioCtx = document.getElementById('productRatioChart').getContext('2d');
+            new Chart(productRatioCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['湖北省人民医院', '北京天坛医院', '唐山市人民医院', '重庆医科大学附属第二医院', '河南科技大学第一附属医院'],
+                    datasets: [
+                        {
+                            label: '产品1001占比',
+                            data: [40.7, 38.8, 54.1, 50.6, 40.3],
+                            backgroundColor: '#1a3a8f',
+                        },
+                        {
+                            label: '产品1002占比',
+                            data: [59.3, 61.2, 45.9, 49.4, 59.7],
+                            backgroundColor: '#3b74e3',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '产品在各医院销售占比(%)'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            stacked: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '占比百分比'
+                            }
+                        },
+                        x: {
+                            stacked: true,
+                        }
+                    }
+                }
+            });
+            
+            // PPT4: 目标完成情况分析
+            const targetCompletionCtx = document.getElementById('targetCompletionChart').getContext('2d');
+            new Chart(targetCompletionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['湖北人民-1002', '湖北人民-1001', '天坛医院-1002', '天坛医院-1001', '唐山人民-1002', '唐山人民-1001', '河南科技-1002', '河南科技-1001', '重庆医科-1002', '重庆医科-1001'],
+                    datasets: [{
+                        label: '完成率(%)',
+                        data: [523, 119, 841, 171, 477, 135, 198, 98, 335, 182],
+                        backgroundColor: function(context) {
+                            const value = context.dataset.data[context.dataIndex];
+                            if (value >= 500) return '#1a3a8f';
+                            if (value >= 200) return '#2a56b6';
+                            if (value >= 100) return '#3b74e3';
+                            return '#5c8cec';
+                        },
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '各产品目标完成率(%)'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '完成率(%)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // PPT5: 退货情况分析
+            const returnCtx = document.getElementById('returnChart').getContext('2d');
+            new Chart(returnCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['重庆医科大学附属第二医院', '唐山市人民医院', '北京天坛医院', '湖北省人民医院', '河南科技大学第一附属医院'],
+                    datasets: [{
+                        label: '退货金额',
+                        data: [563, 579, 269, 320, 247],
+                        backgroundColor: '#dc3545',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '各医院退货金额统计'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '退货金额'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // PPT6: 产品销售数量对比
+            const salesQuantityCtx = document.getElementById('salesQuantityChart').getContext('2d');
+            new Chart(salesQuantityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['湖北省人民医院', '北京天坛医院', '唐山市人民医院', '重庆医科大学附属第二医院', '河南科技大学第一附属医院'],
+                    datasets: [
+                        {
+                            label: '产品1001销售数量',
+                            data: [18702.97, 20732.12, 17899.37, 16148.29, 18092.76],
+                            backgroundColor: '#1a3a8f',
+                        },
+                        {
+                            label: '产品1002销售数量',
+                            data: [34246.99, 31440.32, 32715.73, 32315.98, 34853.87],
+                            backgroundColor: '#3b74e3',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '产品销售数量分布'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '销售数量'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
